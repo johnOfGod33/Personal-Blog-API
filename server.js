@@ -13,5 +13,6 @@ connectionDb((err) => {
   }
 });
 
+app.use(express.json());
 app.use("/users", usersRoute);
 app.use("/articles", articlesRoute);
