@@ -1,4 +1,4 @@
-const { Schema, model, SchemaType } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose");
 
 const articleSchema = new Schema({
   title: {
@@ -6,7 +6,7 @@ const articleSchema = new Schema({
     required: true,
   },
   author: {
-    type: SchemaType.ObjectId,
+    type: SchemaTypes.ObjectId,
     ref: "User",
     required: true,
   },
