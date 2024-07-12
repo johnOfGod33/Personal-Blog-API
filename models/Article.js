@@ -23,7 +23,7 @@ const articleSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String, default: "" },
   content: {
     type: String,
     required: true,
@@ -36,6 +36,7 @@ const articleSchema = new Schema({
     type: Number,
     default: 0,
   },
+  tags: [String],
   Comments: [
     {
       username: String,
