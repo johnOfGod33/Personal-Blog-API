@@ -1,13 +1,57 @@
-exports.createArticle = (req, res) => {};
+const Articles = require("../models/Article");
 
-exports.getPublishedArticles = (req, res) => {};
+exports.createArticle = (req, res) => {
+  const article = req.body;
+  article.author = req.ID;
 
-exports.getDraftArticles = (req, res) => {};
+  Articles.create(article)
+    .then((value) => {
+      res.status(201).json(value);
+    })
+    .catch((err) => res.status(500).json(err));
+};
 
-exports.getOneArticle = (req, res) => {};
+exports.getPublishedArticles = (req, res) => {
+  Articles.find({ published: true })
+    .populate("author", { username: 1 })
+    .then((articles) => {
+      res.status(200).json(articles);
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
+exports.getDraftArticles = (req, res) => {
+  Articles.find({ published: false })
+    .populate("author", { username: 1 })
+    .then((articles) => {
+      res.status(200).json(articles);
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
+exports.getOneArticle = (req, res) => {
+  const articleId = req.params.id;
+
+  Articles.findOne({ _id: articleId })
+    .populate("author", { username: 1 })
+    .then((article) => {
+      article
+        ? res.status(200).json(article)
+        : res.status(404).json("article not find");
+    })
+    .catch((err) => res.status(500).json(err));
+};
 
 exports.updateArticle = (req, res) => {};
 
 exports.addComment = (req, res) => {};
 
-exports.deleteArticle = (req, res) => {};
+exports.deleteArticle = (req, res) => {
+  const articleId = req.params.id;
+
+  Articles.deleteOne({ _id: articleId })
+    .then((value) => {
+      res.status(200).json(value);
+    })
+    .catch((err) => res.status(500).json(err));
+};
