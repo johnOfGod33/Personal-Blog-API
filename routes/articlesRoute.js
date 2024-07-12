@@ -3,25 +3,33 @@ const auth = require("auth-module");
 const articlesCtrl = require("../controllers/articlesController");
 const router = express.Router();
 
-router.post("/createArtcicle", auth.verifyToken, articlesCtrl.createArticle);
+router.post(
+  "/createArticle",
+  auth.verifyToken(process.env.SECRET_KEY),
+  articlesCtrl.createArticle
+);
 
 router.get("/getPublishedArticles", articlesCtrl.getPublishedArticles);
 
 router.get(
   "/getDraftArticles",
-  auth.verifyToken,
+  auth.verifyToken(process.env.SECRET_KEY),
   articlesCtrl.getDraftArticles
 );
 
 router.get("/getOneArticle/:id", articlesCtrl.getOneArticle);
 
-router.put("/updateArticle/:id", auth.verifyToken, articlesCtrl.updateArticle);
+router.put(
+  "/updateArticle/:id",
+  auth.verifyToken(process.env.SECRET_KEY),
+  articlesCtrl.updateArticle
+);
 
 router.put("/addComment/:id", articlesCtrl.addComment);
 
 router.delete(
   "/deleteArticle/:id",
-  auth.verifyToken,
+  auth.verifyToken(process.env.SECRET_KEY),
   articlesCtrl.deleteArticle
 );
 
