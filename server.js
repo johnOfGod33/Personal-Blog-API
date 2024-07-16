@@ -8,7 +8,7 @@ const app = express();
 
 connectionDb((err) => {
   if (!err) {
-    app.listen(3000, () => {
+    app.listen(5000 || process.env.PORT, () => {
       console.log("database connected");
       console.log("server connected");
     });
