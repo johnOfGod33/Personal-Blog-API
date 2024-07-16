@@ -1,6 +1,6 @@
 require("dotenv").config();
 const User = require("../models/User");
-const auth = require("auth-module");
+const auth = require("jwt-auths-module");
 
 exports.signup = (req, res) => {
   const { username, password, email } = req.body;
@@ -16,7 +16,7 @@ exports.signup = (req, res) => {
   };
 
   auth
-    .getHashPassword(password)
+    .hashPassword(password)
     .then((encryptedPassword) => createUser(encryptedPassword))
     .catch((err) => {
       res.status(400).json(err);
@@ -30,7 +30,7 @@ exports.login = (req, res) => {
   User.findOne({ email }, { _id: 1, password: 1 })
     .then((user) => {
       auth
-        .authentification(
+        .authenticateUser(
           user.password,
           inputPassword,
           user._id,
@@ -41,10 +41,10 @@ exports.login = (req, res) => {
           res.status(201).json(token);
         })
         .catch((err) => {
-          res.status(401).json(messageError);
+          res.status(400).json(messageError);
         });
     })
     .catch((err) => {
-      res.status(401).json(messageError);
+      res.status(404).json(messageError);
     });
 };

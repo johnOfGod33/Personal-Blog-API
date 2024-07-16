@@ -1,5 +1,5 @@
 const express = require("express");
-const auth = require("auth-module");
+const auth = require("jwt-auths-module");
 const articlesCtrl = require("../controllers/articlesController");
 const router = express.Router();
 
