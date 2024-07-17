@@ -2,6 +2,16 @@ require("dotenv").config();
 const User = require("../models/User");
 const auth = require("jwt-auths-module");
 
+const findUser = (email, callback) => {
+  User.find({ email })
+    .then((user) => {
+      return callback(user);
+    })
+    .catch(() => {
+      return callback();
+    });
+};
+
 exports.signup = (req, res) => {
   const { username, password, email } = req.body;
 
@@ -15,20 +25,26 @@ exports.signup = (req, res) => {
       });
   };
 
-  auth
-    .hashPassword(password)
-    .then((encryptedPassword) => createUser(encryptedPassword))
-    .catch((err) => {
-      res.status(400).json(err);
-    });
+  findUser(email, (user) => {
+    if (!user) {
+      auth
+        .hashPassword(password)
+        .then((encryptedPassword) => createUser(encryptedPassword))
+        .catch((err) => {
+          res.status(400).json(err);
+        });
+    } else {
+      res.status(400).json({ error: "email already exist" });
+    }
+  });
 };
 
 exports.login = (req, res) => {
   const { email, inputPassword } = req.body;
   const messageError = "passwoword or email incorrect";
 
-  User.findOne({ email }, { _id: 1, password: 1 })
-    .then((user) => {
+  findUser(email, (user) => {
+    if (user) {
       auth
         .authenticateUser(
           user.password,
@@ -43,8 +59,8 @@ exports.login = (req, res) => {
         .catch((err) => {
           res.status(400).json(messageError);
         });
-    })
-    .catch((err) => {
+    } else {
       res.status(404).json(messageError);
-    });
+    }
+  });
 };
