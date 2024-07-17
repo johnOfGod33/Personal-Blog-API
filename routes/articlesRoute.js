@@ -1,6 +1,7 @@
 const express = require("express");
 const auth = require("jwt-auths-module");
 const articlesCtrl = require("../controllers/articlesController");
+const getAuthorID = require("../middlewares/getAuthorID");
 const verifyEmail = require("../middlewares/verifyEmail");
 const router = express.Router();
 
@@ -10,7 +11,11 @@ router.post(
   articlesCtrl.createArticle
 );
 
-router.get("/getPublishedArticles", articlesCtrl.getPublishedArticles);
+router.get(
+  "/getPublishedArticles",
+  getAuthorID,
+  articlesCtrl.getPublishedArticles
+);
 
 router.get(
   "/getDraftArticles",

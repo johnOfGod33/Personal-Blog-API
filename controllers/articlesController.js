@@ -1,11 +1,10 @@
 const Article = require("../models/Article");
-const Articles = require("../models/Article");
 
 exports.createArticle = (req, res) => {
   const article = req.body;
   article.author = req.ID;
 
-  Articles.create(article)
+  Article.create(article)
     .then((value) => {
       res.status(201).json(value);
     })
@@ -13,8 +12,7 @@ exports.createArticle = (req, res) => {
 };
 
 exports.getPublishedArticles = (req, res) => {
-  Articles.find({ published: true })
-    .populate("author", { username: 1 })
+  Article.find({ published: true, author: req.authorID }, { content: 0 })
     .then((articles) => {
       res.status(200).json(articles);
     })
@@ -22,7 +20,7 @@ exports.getPublishedArticles = (req, res) => {
 };
 
 exports.getDraftArticles = (req, res) => {
-  Articles.find({ published: false })
+  Article.find({ published: false })
     .populate("author", { username: 1 })
     .then((articles) => {
       res.status(200).json(articles);
@@ -31,9 +29,9 @@ exports.getDraftArticles = (req, res) => {
 };
 
 exports.getOneArticle = (req, res) => {
-  const articleId = req.params.id;
+  const articleId = req.params.id || req.query.id;
 
-  Articles.findOne({ _id: articleId })
+  Article.findOne({ _id: articleId })
     .populate("author", { username: 1 })
     .then((article) => {
       article
@@ -44,7 +42,7 @@ exports.getOneArticle = (req, res) => {
 };
 
 exports.updateArticle = (req, res) => {
-  const articleId = req.params.id;
+  const articleId = req.params.id || req.query.id;
 
   Article.updateOne({ _id: articleId }, { $set: req.body })
     .then((value) => res.status(200).json(value))
@@ -52,7 +50,7 @@ exports.updateArticle = (req, res) => {
 };
 
 exports.addComment = (req, res) => {
-  const articleId = req.params.id;
+  const articleId = req.params.id || req.query.id;
 
   Article.updateOne({ _id: articleId }, { $push: { Comments: req.body } })
     .then((value) => res.status(200).json(value))
@@ -60,9 +58,9 @@ exports.addComment = (req, res) => {
 };
 
 exports.deleteArticle = (req, res) => {
-  const articleId = req.params.id;
+  const articleId = req.params.id || req.query.id;
 
-  Articles.deleteOne({ _id: articleId })
+  Article.deleteOne({ _id: articleId })
     .then((value) => {
       res.status(200).json(value);
     })
