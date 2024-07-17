@@ -12,7 +12,7 @@ router.post(
 );
 
 router.get(
-  "/getPublishedArticles",
+  "/getPublishedArticles/:authorEmail",
   getAuthorID,
   articlesCtrl.getPublishedArticles
 );
