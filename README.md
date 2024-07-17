@@ -26,7 +26,7 @@ A RESTful API that would power a personal blog
 
 ### `users collection`
 
-```json
+```js
 {
   username: {
     type: String,
@@ -45,7 +45,7 @@ A RESTful API that would power a personal blog
 
 ### `articles collection`
 
-```json
+```js
 {
   title: {
     type: String,
