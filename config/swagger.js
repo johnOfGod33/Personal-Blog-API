@@ -8,6 +8,12 @@ const swaggerDefinition = {
     version: "1.0.0",
     description: "A RESTful API that would power a personal blog",
   },
+  servers: [
+    {
+      url: "http://localhost:5000/",
+      description: "local server",
+    },
+  ],
 };
 
 const options = {
