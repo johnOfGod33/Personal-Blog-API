@@ -1,7 +1,7 @@
 const User = require("../models/User");
 
 const getAuthorID = (req, res, next) => {
-  const authorEmail = req.params.authorEmail || req.query.authorEmail;
+  const authorEmail = req.params.authorEmail;
 
   User.findOne({ email: authorEmail }, { _id: 1 })
     .then((result) => {

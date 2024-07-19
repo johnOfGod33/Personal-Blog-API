@@ -12,7 +12,10 @@ exports.createArticle = (req, res) => {
 };
 
 exports.getPublishedArticles = (req, res) => {
-  Article.find({ published: true, author: req.authorID }, { content: 0 })
+  Article.find(
+    { published: true, author: req.authorID },
+    { content: 0, Comments: 0 }
+  )
     .then((articles) => {
       res.status(200).json(articles);
     })
@@ -29,7 +32,7 @@ exports.getDraftArticles = (req, res) => {
 };
 
 exports.getOneArticle = (req, res) => {
-  const articleId = req.params.id || req.query.id;
+  const articleId = req.params.id;
 
   Article.findOne({ _id: articleId })
     .populate("author", { username: 1 })
@@ -42,27 +45,27 @@ exports.getOneArticle = (req, res) => {
 };
 
 exports.updateArticle = (req, res) => {
-  const articleId = req.params.id || req.query.id;
+  const articleId = req.params.id;
 
   Article.updateOne({ _id: articleId }, { $set: req.body })
-    .then((value) => res.status(200).json(value))
+    .then((value) => res.status(200).json({ message: "article updated" }))
     .catch((err) => res.status(500).json(err));
 };
 
 exports.addComment = (req, res) => {
-  const articleId = req.params.id || req.query.id;
+  const articleId = req.params.id;
 
   Article.updateOne({ _id: articleId }, { $push: { Comments: req.body } })
-    .then((value) => res.status(200).json(value))
+    .then((value) => res.status(200).json({ message: "comment posted" }))
     .catch((err) => res.status(500).json(err));
 };
 
 exports.deleteArticle = (req, res) => {
-  const articleId = req.params.id || req.query.id;
+  const articleId = req.params.id;
 
   Article.deleteOne({ _id: articleId })
     .then((value) => {
-      res.status(200).json(value);
+      res.status(200).json({ message: "article deleted" });
     })
     .catch((err) => res.status(500).json(err));
 };
