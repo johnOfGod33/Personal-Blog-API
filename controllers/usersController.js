@@ -3,11 +3,11 @@ const User = require("../models/User");
 const auth = require("jwt-auths-module");
 
 const findUser = (email, callback) => {
-  User.find({ email })
+  User.findOne({ email })
     .then((user) => {
       return callback(user);
     })
-    .catch(() => {
+    .catch((err) => {
       return callback();
     });
 };
