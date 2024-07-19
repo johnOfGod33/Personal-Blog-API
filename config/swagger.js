@@ -14,6 +14,73 @@ const swaggerDefinition = {
       description: "local server",
     },
   ],
+  tags: [
+    {
+      name: "users",
+      description: "endpoints about users",
+    },
+    {
+      name: "articles",
+      description: "endpoints about articles",
+    },
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+    schemas: {
+      User: {
+        type: Object,
+        properties: {
+          username: {
+            type: String,
+            required: true,
+          },
+          email: {
+            type: String,
+            required: true,
+          },
+          password: {
+            type: String,
+            required: true,
+          },
+        },
+      },
+      Article: {
+        type: Object,
+        properties: {
+          title: {
+            type: String,
+            required: true,
+            example: "new article",
+          },
+
+          description: {
+            type: String,
+            required: true,
+            example: "this is new article",
+          },
+          published: {
+            type: Boolean,
+            default: false,
+          },
+          imageUrl: {
+            type: String,
+            default: "",
+          },
+          content: {
+            type: String,
+            required: true,
+            example: "new article to test the endpoint",
+          },
+        },
+      },
+    },
+  },
 };
 
 const options = {
