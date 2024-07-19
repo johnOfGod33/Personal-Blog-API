@@ -9,44 +9,18 @@ const router = express.Router();
  * @swagger
  * /articles/createArticle:
  *  post:
+ *    summary: create a new article
  *    tags:
  *      - articles
  *    description: create new article
- *    parameters:
- *      - name: token
- *        in: header
- *        required: true
- *        schema:
- *          type: string
- *          example: bearer token
- *        description: user's token (we need to login to get the token)
+ *    security:
+ *      - bearerAuth: []
  *    requestBody:
  *      required: true
  *      content:
  *        application/json:
  *          schema:
- *            type: object
- *            required:
- *              - title
- *              - description
- *              - published
- *              - content
- *            properties:
- *              title:
- *                type: string
- *                example: new article
- *              description:
- *                type: string
- *                example: this is new article
- *              published:
- *                type: boolean
- *                default: false
- *              imageUrl:
- *                type: string
- *                default: ""
- *              content:
- *                type: string
- *                example: new article to test the endpoint
+ *            $ref: "#/components/schemas/Article"
  *    responses:
  *      201:
  *        description: article created
@@ -63,14 +37,15 @@ router.post(
 
 /**
  * @swagger
- * /articles/getPublisedArticles/authorEmail:
+ * /articles/getPublishedArticles/{authorEmail}:
  *  get:
+ *    summary: get list of published article
  *    tags:
  *      - articles
- *    description: get publised article of user by his email
+ *    description: get user's published articles by his email
  *    parameters:
  *      - name: authorEmail
- *        in: path, query
+ *        in: path
  *        required: true
  *        schema:
  *          type: string
@@ -93,17 +68,12 @@ router.get(
  * @swagger
  * /articles/getDraftArticles:
  *  get:
+ *    summary: get draft article
  *    tags:
  *      - articles
  *    description: get fraft article of user
- *    parameters:
- *      - name: token
- *        in: header
- *        required: true
- *        schema:
- *          type: string
- *          example: bearer token
- *        description: user's email
+ *    security:
+ *      - bearerAuth: []
  *    responses:
  *      200:
  *        description: success
@@ -121,14 +91,15 @@ router.get(
 
 /**
  * @swagger
- * /articles/getOneArticle/id:
+ * /articles/getOneArticle/{id}:
  *  get:
+ *    summary: get one article
  *    tags:
  *      - articles
  *    description: get one article by his id
  *    parameters:
  *      - name: id
- *        in: path, query
+ *        in: path
  *        required: true
  *        schema:
  *          type: string
@@ -145,21 +116,17 @@ router.get("/getOneArticle/:id", articlesCtrl.getOneArticle);
 
 /**
  * @swagger
- * /articles/updateArticle/id:
+ * /articles/updateArticle/{id}:
  *  put:
+ *    summary: edited article
  *    tags:
  *      - articles
  *    description: update article
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
- *      - name: token
- *        in: header
- *        required: true
- *        schema:
- *          type: string
- *          example: bearer token
- *        description: user's token (we need to login to get the token)
  *      - name: id
- *        in: path, query
+ *        in: path
  *        required: true
  *        schema:
  *          type: string
@@ -169,28 +136,7 @@ router.get("/getOneArticle/:id", articlesCtrl.getOneArticle);
  *      content:
  *        application/json:
  *          schema:
- *            type: object
- *            required:
- *              - title
- *              - description
- *              - published
- *              - content
- *            properties:
- *              title:
- *                type: string
- *                example: new article
- *              description:
- *                type: string
- *                example: this is new article
- *              published:
- *                type: boolean
- *                default: false
- *              imageUrl:
- *                type: string
- *                default: ""
- *              content:
- *                type: string
- *                example: I update the article to test the endpoint
+ *            $ref: "#/components/schemas/Article"
  *    responses:
  *      200:
  *        description: article updated
@@ -207,14 +153,15 @@ router.put(
 
 /**
  * @swagger
- * /articles/addComment/id:
+ * /articles/addComment/{id}:
  *  put:
+ *    summary: add new comment
  *    tags:
  *      - articles
- *    description: add comment
+ *    description: client can add comment to author's article
  *    parameters:
  *      - name: id
- *        in: path, query
+ *        in: path
  *        required: true
  *        schema:
  *          type: string
@@ -251,25 +198,21 @@ router.put("/addComment/:id", verifyEmail, articlesCtrl.addComment);
 
 /**
  * @swagger
- * /articles/delete/id:
+ * /articles/deleteArticle/{id}:
  *  delete:
+ *    summary: delete article
  *    tags:
  *      - articles
  *    description: delete one article by his id
+ *    security:
+ *      - bearerAuth: []
  *    parameters:
  *      - name: id
- *        in: path, query
+ *        in: path
  *        required: true
  *        schema:
  *          type: string
  *        description: article's id
- *      - name: token
- *        in: header
- *        required: true
- *        schema:
- *          type: string
- *          example: bearer token
- *        description: user's token (we need to login to get the token)
  *    responses:
  *      200:
  *        description: success

@@ -7,6 +7,7 @@ const router = express.Router();
 @swagger
  * /users/signup:
  *  post:
+ *      summary: Create a new user
  *      tags:
  *          - users
  *      description: Create a new user
@@ -15,21 +16,7 @@ const router = express.Router();
  *          content:
  *              application/json:
  *                  schema:
- *                      type: object
- *                      required:
- *                          - username
- *                          - email
- *                          - password
- *                      properties:
- *                          username:
- *                              type: string
- *                              example: jean de dieu
- *                          email:
- *                              type: string
- *                              example: jeandedieusessou@gmail.com
- *                          password:
- *                              type: string
- *                              example: diiqsdhdh
+ *                      $ref: "#/components/schemas/User"
  *      responses:
  *          201:
  *              description: User created
@@ -44,6 +31,7 @@ router.post("/signup", verifyEmail, usersCtrl.signup);
 @swagger
  * /users/login:
  *  post:
+ *      summary: user's authentication
  *      tags:
  *          - users
  *      description: authenticate user and send token if operation success
@@ -59,10 +47,8 @@ router.post("/signup", verifyEmail, usersCtrl.signup);
  *                      properties:
  *                          email:
  *                              type: string
- *                              example: jeandedieusessou@gmail.com
  *                          inputPassword:
  *                              type: string
- *                              example: djqisjid
  *      responses:
  *          201:
  *              description: success and token created
