@@ -16,6 +16,10 @@ A RESTful API that would power a personal blog
 
 - Delete article
 
+# Docs
+
+check [here](https://personal-blog-api-7cge.onrender.com/api-docs/)
+
 # TECH
 
 - Node js
@@ -92,11 +96,3 @@ A RESTful API that would power a personal blog
   ],
 }
 ```
-
-# Setting Up Locally
-
-coming soon
-
-# Docs
-
-coming soon
