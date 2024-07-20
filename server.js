@@ -19,7 +19,7 @@ connectionDb((err) => {
   }
 });
 
-app.use(cors({ origin: process.env.ORIGIN }));
+app.use(cors());
 app.use(express.json());
 app.use("/users", usersRoute);
 app.use("/articles", articlesRoute);
