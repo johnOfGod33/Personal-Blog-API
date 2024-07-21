@@ -24,7 +24,8 @@ check [here](https://personal-blog-api-7cge.onrender.com/api-docs/)
 
 - Node js
 - Express js
-- MongoDB
+- Mongoose & mongoDB Atlas
+- Swagger
 
 # Database Schema
 
