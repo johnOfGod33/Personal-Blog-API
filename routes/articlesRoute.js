@@ -50,6 +50,20 @@ router.post(
  *        schema:
  *          type: string
  *        description: user's email
+ *      - name : p
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 0
+ *        description:  the actual page number
+ *      - name : limit
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 5
+ *        description: limit the article list returned
  *    responses:
  *      200:
  *        description: success
@@ -69,6 +83,21 @@ router.get(
  * /articles/getDraftArticles:
  *  get:
  *    summary: get draft article
+ *    parameters:
+ *      - name : p
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 0
+ *        description:  the actual page number
+ *      - name : limit
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 5
+ *        description: limit the article list returned
  *    tags:
  *      - articles
  *    description: get fraft article of user
