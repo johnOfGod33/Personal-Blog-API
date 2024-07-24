@@ -12,10 +12,15 @@ exports.createArticle = (req, res) => {
 };
 
 exports.getPublishedArticles = (req, res) => {
+  const page = req.query.p || 0;
+  const limit = req.query.limit || 5;
+
   Article.find(
     { published: true, author: req.authorID },
     { content: 0, Comments: 0 }
   )
+    .skip(page * limit)
+    .limit(limit)
     .then((articles) => {
       res.status(200).json(articles);
     })
@@ -23,8 +28,13 @@ exports.getPublishedArticles = (req, res) => {
 };
 
 exports.getDraftArticles = (req, res) => {
+  const page = req.query.p || 0;
+  const limit = req.query.limit || 5;
+
   Article.find({ published: false })
     .populate("author", { username: 1 })
+    .skip(page * limit)
+    .limit(limit)
     .then((articles) => {
       res.status(200).json(articles);
     })
