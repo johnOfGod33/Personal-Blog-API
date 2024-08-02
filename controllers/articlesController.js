@@ -41,7 +41,7 @@ exports.getDraftArticles = (req, res) => {
     .catch((err) => res.status(500).json(err));
 };
 
-exports.getOneArticle = (req, res) => {
+exports.getArticleById = (req, res) => {
   const articleId = req.params.id;
 
   Article.findOne({ _id: articleId })

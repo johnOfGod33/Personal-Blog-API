@@ -120,7 +120,7 @@ router.get(
 
 /**
  * @swagger
- * /articles/getOneArticle/{id}:
+ * /articles/getArticleById/{id}:
  *  get:
  *    summary: get one article
  *    tags:
@@ -141,7 +141,7 @@ router.get(
  *      500:
  *        description: server error
  */
-router.get("/getOneArticle/:id", articlesCtrl.getOneArticle);
+router.get("/getArticleById/:id", articlesCtrl.getArticleById);
 
 /**
  * @swagger
