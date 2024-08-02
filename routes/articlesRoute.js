@@ -145,6 +145,31 @@ router.get("/getArticleById/:id", articlesCtrl.getArticleById);
 
 /**
  * @swagger
+ * /articles/getArticleByTitle/{articleTitle}:
+ *  get:
+ *    summary: get one article
+ *    tags:
+ *      - articles
+ *    description: get one article by his title
+ *    parameters:
+ *      - name: articleTitle
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: article's title
+ *    responses:
+ *      200:
+ *        description: success
+ *      404:
+ *        description: article not found
+ *      500:
+ *        description: server error
+ */
+router.get("/getArticleByTitle/:articleTitle", articlesCtrl.getArticleByTitle);
+
+/**
+ * @swagger
  * /articles/updateArticle/{id}:
  *  put:
  *    summary: edited article
