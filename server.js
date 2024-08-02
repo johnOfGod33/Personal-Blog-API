@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const connectionDb = require("./middlewares/dbConfig");
+const connectionDb = require("./config/dbConfig");
 const swaggerDocs = require("./config/swagger");
 const usersRoute = require("./routes/usersRoute");
 const articlesRoute = require("./routes/articlesRoute");

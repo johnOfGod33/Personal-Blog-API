@@ -12,10 +12,15 @@ exports.createArticle = (req, res) => {
 };
 
 exports.getPublishedArticles = (req, res) => {
+  const page = req.query.p || 0;
+  const limit = req.query.limit || 5;
+
   Article.find(
     { published: true, author: req.authorID },
     { content: 0, Comments: 0 }
   )
+    .skip(page * limit)
+    .limit(limit)
     .then((articles) => {
       res.status(200).json(articles);
     })
@@ -23,18 +28,36 @@ exports.getPublishedArticles = (req, res) => {
 };
 
 exports.getDraftArticles = (req, res) => {
+  const page = req.query.p || 0;
+  const limit = req.query.limit || 5;
+
   Article.find({ published: false })
     .populate("author", { username: 1 })
+    .skip(page * limit)
+    .limit(limit)
     .then((articles) => {
       res.status(200).json(articles);
     })
     .catch((err) => res.status(500).json(err));
 };
 
-exports.getOneArticle = (req, res) => {
+exports.getArticleById = (req, res) => {
   const articleId = req.params.id;
 
   Article.findOne({ _id: articleId })
+    .populate("author", { username: 1 })
+    .then((article) => {
+      article
+        ? res.status(200).json(article)
+        : res.status(404).json("article not find");
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
+exports.getArticleByTitle = (req, res) => {
+  const articleTitle = req.params.articleTitle;
+
+  Article.findOne({ title: articleTitle })
     .populate("author", { username: 1 })
     .then((article) => {
       article

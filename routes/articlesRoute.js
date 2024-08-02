@@ -50,6 +50,20 @@ router.post(
  *        schema:
  *          type: string
  *        description: user's email
+ *      - name : p
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 0
+ *        description:  the actual page number
+ *      - name : limit
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 5
+ *        description: limit the article list returned
  *    responses:
  *      200:
  *        description: success
@@ -69,6 +83,21 @@ router.get(
  * /articles/getDraftArticles:
  *  get:
  *    summary: get draft article
+ *    parameters:
+ *      - name : p
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 0
+ *        description:  the actual page number
+ *      - name : limit
+ *        in: query
+ *        required: false
+ *        schema:
+ *          type: number
+ *          default: 5
+ *        description: limit the article list returned
  *    tags:
  *      - articles
  *    description: get fraft article of user
@@ -91,7 +120,7 @@ router.get(
 
 /**
  * @swagger
- * /articles/getOneArticle/{id}:
+ * /articles/getArticleById/{id}:
  *  get:
  *    summary: get one article
  *    tags:
@@ -112,7 +141,32 @@ router.get(
  *      500:
  *        description: server error
  */
-router.get("/getOneArticle/:id", articlesCtrl.getOneArticle);
+router.get("/getArticleById/:id", articlesCtrl.getArticleById);
+
+/**
+ * @swagger
+ * /articles/getArticleByTitle/{articleTitle}:
+ *  get:
+ *    summary: get one article
+ *    tags:
+ *      - articles
+ *    description: get one article by his title
+ *    parameters:
+ *      - name: articleTitle
+ *        in: path
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: article's title
+ *    responses:
+ *      200:
+ *        description: success
+ *      404:
+ *        description: article not found
+ *      500:
+ *        description: server error
+ */
+router.get("/getArticleByTitle/:articleTitle", articlesCtrl.getArticleByTitle);
 
 /**
  * @swagger
