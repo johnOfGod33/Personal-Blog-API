@@ -54,6 +54,19 @@ exports.getArticleById = (req, res) => {
     .catch((err) => res.status(500).json(err));
 };
 
+exports.getArticleByTitle = (req, res) => {
+  const articleTitle = req.params.articleTitle;
+
+  Article.findOne({ title: articleTitle })
+    .populate("author", { username: 1 })
+    .then((article) => {
+      article
+        ? res.status(200).json(article)
+        : res.status(404).json("article not find");
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
 exports.updateArticle = (req, res) => {
   const articleId = req.params.id;
 
