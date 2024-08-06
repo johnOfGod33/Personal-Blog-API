@@ -8,7 +8,7 @@ const getAuthorID = (req, res, next) => {
       req.authorID = result._id;
       next();
     })
-    .catch((err) => res.status(404).json({ error: "author not found" }));
+    .catch((err) => res.status(404).json({ message: "author not found" }));
 };
 
 module.exports = getAuthorID;

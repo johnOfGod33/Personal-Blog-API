@@ -6,9 +6,13 @@ exports.createArticle = (req, res) => {
 
   Article.create(article)
     .then((value) => {
-      res.status(201).json(value);
+      res.status(201).json({ message: "article created", value });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.getPublishedArticles = (req, res) => {
@@ -24,7 +28,11 @@ exports.getPublishedArticles = (req, res) => {
     .then((articles) => {
       res.status(200).json(articles);
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.getDraftArticles = (req, res) => {
@@ -38,7 +46,11 @@ exports.getDraftArticles = (req, res) => {
     .then((articles) => {
       res.status(200).json(articles);
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.getArticleById = (req, res) => {
@@ -51,7 +63,11 @@ exports.getArticleById = (req, res) => {
         ? res.status(200).json(article)
         : res.status(404).json("article not find");
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.getArticleByTitle = (req, res) => {
@@ -64,7 +80,11 @@ exports.getArticleByTitle = (req, res) => {
         ? res.status(200).json(article)
         : res.status(404).json("article not find");
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.updateArticle = (req, res) => {
@@ -72,7 +92,11 @@ exports.updateArticle = (req, res) => {
 
   Article.updateOne({ _id: articleId }, { $set: req.body })
     .then((value) => res.status(200).json({ message: "article updated" }))
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.addComment = (req, res) => {
@@ -80,7 +104,11 @@ exports.addComment = (req, res) => {
 
   Article.updateOne({ _id: articleId }, { $push: { Comments: req.body } })
     .then((value) => res.status(200).json({ message: "comment posted" }))
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };
 
 exports.deleteArticle = (req, res) => {
@@ -90,5 +118,9 @@ exports.deleteArticle = (req, res) => {
     .then((value) => {
       res.status(200).json({ message: "article deleted" });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res.status(503).json({
+        message: "service is currently unvailable. Please try again later",
+      })
+    );
 };

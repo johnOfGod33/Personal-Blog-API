@@ -18,10 +18,12 @@ exports.signup = (req, res) => {
   const createUser = (encryptedPassword) => {
     User.create({ username, email, password: encryptedPassword })
       .then((value) => {
-        res.status(201).json(value);
+        res.status(201).json({ message: "user created", value });
       })
       .catch((err) => {
-        res.status(501).json(err);
+        res.status(503).json({
+          message: "service is currently unvailable. Please try again later",
+        });
       });
   };
 
@@ -31,17 +33,19 @@ exports.signup = (req, res) => {
         .hashPassword(password)
         .then((encryptedPassword) => createUser(encryptedPassword))
         .catch((err) => {
-          res.status(400).json(err);
+          res.status(500).json({
+            message: "unexpected error occured. Please try agian later",
+          });
         });
     } else {
-      res.status(400).json({ error: "email already exist" });
+      res.status(400).json({ message: "email already exist" });
     }
   });
 };
 
 exports.login = (req, res) => {
   const { email, inputPassword } = req.body;
-  const messageError = "passwoword or email incorrect";
+  const messageError = "password or email incorrect";
 
   findUser(email, (user) => {
     if (user) {
@@ -53,14 +57,13 @@ exports.login = (req, res) => {
           process.env.SECRET_KEY
         )
         .then((token) => {
-          console.log(token);
-          res.status(201).json(token);
+          res.status(201).json({ message: "access token created", token });
         })
         .catch((err) => {
-          res.status(401).json(messageError);
+          res.status(401).json({ message: messageError });
         });
     } else {
-      res.status(404).json(messageError);
+      res.status(404).json({ message: messageError });
     }
   });
 };

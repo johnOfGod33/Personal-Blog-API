@@ -6,7 +6,9 @@ const verifyEmail = (req, res, next) => {
   if (emailRegex.test(email)) {
     next();
   } else {
-    res.status(400).json({ error: "Invalid email format" });
+    res
+      .status(400)
+      .json({ message: "Invalid email format or email's field miss" });
   }
 };
 
