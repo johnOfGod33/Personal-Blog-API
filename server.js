@@ -8,18 +8,19 @@ const articlesRoute = require("./routes/articlesRoute");
 const app = express();
 const port = 5000 || process.env.PORT;
 
+app.use(cors());
+app.use(express.json());
+
+app.use("/users", usersRoute);
+app.use("/articles", articlesRoute);
+
+swaggerDocs(app, port);
+
 connectionDb((err) => {
   if (!err) {
     app.listen(port, () => {
       console.log("database connected");
-      console.log("server connected");
+      console.log(`Server running on port ${port}`);
     });
-
-    swaggerDocs(app, port);
   }
 });
-
-app.use(cors());
-app.use(express.json());
-app.use("/users", usersRoute);
-app.use("/articles", articlesRoute);
