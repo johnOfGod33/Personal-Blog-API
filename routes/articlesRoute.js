@@ -1,8 +1,10 @@
 const express = require("express");
 const auth = require("jwt-auths-module");
 const articlesCtrl = require("../controllers/articlesController");
+const articlesCache = require("../middlewares/cache/articlesCache");
 const getAuthorID = require("../middlewares/getAuthorID");
 const verifyEmail = require("../middlewares/verifyEmail");
+
 const router = express.Router();
 
 /**
@@ -75,6 +77,7 @@ router.post(
 router.get(
   "/getPublishedArticles/:authorEmail",
   getAuthorID,
+  articlesCache.getPublishedArticlesCache,
   articlesCtrl.getPublishedArticles
 );
 

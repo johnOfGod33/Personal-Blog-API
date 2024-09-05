@@ -1,4 +1,6 @@
 const Article = require("../models/Article");
+const redisClient = require("../config/redisConfig");
+const { json } = require("express");
 
 exports.createArticle = (req, res) => {
   const article = req.body;
@@ -15,24 +17,44 @@ exports.createArticle = (req, res) => {
     );
 };
 
-exports.getPublishedArticles = (req, res) => {
+exports.getPublishedArticles = async (req, res) => {
   const page = req.query.p || 0;
   const limit = req.query.limit || 5;
 
-  Article.find(
-    { published: true, author: req.authorID },
-    { content: 0, Comments: 0 }
-  )
-    .skip(page * limit)
-    .limit(limit)
-    .then((articles) => {
-      res.status(200).json(articles);
-    })
-    .catch((err) =>
-      res.status(503).json({
-        message: "service is currently unvailable. Please try again later",
-      })
-    );
+  const setPublishedArticleCache = async (articles) => {
+    try {
+      let value = JSON.stringify(articles);
+
+      let result = await redisClient.setEx(
+        `publishedArticles/${req.authorID}/page${page}`,
+        120,
+        value
+      );
+
+      console.log(result);
+    } catch (err) {
+      console.log({ message: "can't cache published article", err });
+      throw err;
+    }
+  };
+
+  try {
+    const articles = await Article.find(
+      { published: true, author: req.authorID },
+      { content: 0, Comments: 0 }
+    )
+      .skip(page * limit)
+      .limit(limit);
+
+    await setPublishedArticleCache(articles);
+
+    res.status(200).json(articles);
+  } catch (err) {
+    console.log("vooici l'erreur :", err);
+    res.status(503).json({
+      message: "service is currently unvailable. Please try again later",
+    });
+  }
 };
 
 exports.getDraftArticles = (req, res) => {
