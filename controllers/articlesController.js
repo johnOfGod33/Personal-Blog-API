@@ -1,6 +1,15 @@
 const Article = require("../models/Article");
 const redisClient = require("../config/redisConfig");
-const { json } = require("express");
+
+const setArticlesCache = async (articles, cacheKey) => {
+  try {
+    let value = JSON.stringify(articles);
+
+    await redisClient.setEx(cacheKey, 600, value);
+  } catch (err) {
+    throw new Error(`can't cache the value. error: ${err}`);
+  }
+};
 
 exports.createArticle = (req, res) => {
   const article = req.body;
@@ -20,21 +29,7 @@ exports.createArticle = (req, res) => {
 exports.getPublishedArticles = async (req, res) => {
   const page = req.query.p || 0;
   const limit = req.query.limit || 5;
-
-  const setPublishedArticleCache = async (articles) => {
-    try {
-      let value = JSON.stringify(articles);
-
-      await redisClient.setEx(
-        `publishedArticles/${req.authorID}/page${page}`,
-        600,
-        value
-      );
-    } catch (err) {
-      console.log({ message: "can't cache published article", err });
-      throw err;
-    }
-  };
+  const cacheKey = `publishedArticles/${req.authorID}/page${page}`;
 
   try {
     const articles = await Article.find(
@@ -45,7 +40,7 @@ exports.getPublishedArticles = async (req, res) => {
       .skip(page * limit)
       .limit(limit);
 
-    await setPublishedArticleCache(articles);
+    await setArticlesCache(articles, cacheKey);
 
     res.status(200).json({ articles });
   } catch (err) {
@@ -59,21 +54,7 @@ exports.getPublishedArticles = async (req, res) => {
 exports.getDraftArticles = async (req, res) => {
   const page = req.query.p || 0;
   const limit = req.query.limit || 5;
-
-  const setDraftArticlesCache = async (articles) => {
-    try {
-      let value = JSON.stringify(articles);
-
-      await redisClient.setEx(
-        `draftArticles/${req.ID}/page${page}`,
-        600,
-        value
-      );
-    } catch (err) {
-      console.log({ message: "can't cache published article", err });
-      throw err;
-    }
-  };
+  const cacheKey = `draftArticles/${req.ID}/page${page}`;
 
   try {
     const articles = await Article.find({ published: false, author: req.ID })
@@ -81,7 +62,7 @@ exports.getDraftArticles = async (req, res) => {
       .skip(page * limit)
       .limit(limit);
 
-    await setDraftArticlesCache(articles);
+    await setArticlesCache(articles, cacheKey);
 
     res.status(200).json({ articles });
   } catch (err) {
@@ -91,38 +72,57 @@ exports.getDraftArticles = async (req, res) => {
   }
 };
 
-exports.getArticleById = (req, res) => {
+exports.getArticleById = async (req, res) => {
   const articleId = req.params.id;
+  const cacheKey = `article/${articleId}`;
 
-  Article.findOne({ _id: articleId })
-    .populate("author", { username: 1 })
-    .then((article) => {
-      article
-        ? res.status(200).json(article)
-        : res.status(404).json("article not find");
-    })
-    .catch((err) =>
-      res.status(503).json({
-        message: "service is currently unvailable. Please try again later",
-      })
+  try {
+    const article = await Article.findOne({ _id: articleId }).populate(
+      "author",
+      {
+        username: 1,
+      }
     );
+
+    if (article) {
+      await setArticlesCache(article, cacheKey);
+
+      res.status(200).json({ article });
+    } else {
+      res.status(404).json("article not find");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(503).json({
+      message: "service is currently unvailable. Please try again later",
+    });
+  }
 };
 
-exports.getArticleByTitle = (req, res) => {
+exports.getArticleByTitle = async (req, res) => {
   const articleTitle = req.params.articleTitle;
+  const cacheKey = `article/${articleTitle}`;
 
-  Article.findOne({ title: articleTitle })
-    .populate("author", { username: 1 })
-    .then((article) => {
-      article
-        ? res.status(200).json(article)
-        : res.status(404).json("article not find");
-    })
-    .catch((err) =>
-      res.status(503).json({
-        message: "service is currently unvailable. Please try again later",
-      })
+  try {
+    const article = await Article.findOne({ title: articleTitle }).populate(
+      "author",
+      {
+        username: 1,
+      }
     );
+
+    if (article) {
+      await setArticlesCache(article, cacheKey);
+
+      res.status(200).json({ article });
+    } else {
+      res.status(404).json("article not find");
+    }
+  } catch (err) {
+    res.status(503).json({
+      message: "service is currently unvailable. Please try again later",
+    });
+  }
 };
 
 exports.updateArticle = (req, res) => {

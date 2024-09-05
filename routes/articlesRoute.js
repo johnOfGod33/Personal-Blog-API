@@ -145,7 +145,11 @@ router.get(
  *      500:
  *        description: server error
  */
-router.get("/getArticleById/:id", articlesCtrl.getArticleById);
+router.get(
+  "/getArticleById/:id",
+  articlesCache.getArticleByIdCache,
+  articlesCtrl.getArticleById
+);
 
 /**
  * @swagger
@@ -170,7 +174,11 @@ router.get("/getArticleById/:id", articlesCtrl.getArticleById);
  *      500:
  *        description: server error
  */
-router.get("/getArticleByTitle/:articleTitle", articlesCtrl.getArticleByTitle);
+router.get(
+  "/getArticleByTitle/:articleTitle",
+  articlesCache.getArticleByTitleCache,
+  articlesCtrl.getArticleByTitle
+);
 
 /**
  * @swagger
