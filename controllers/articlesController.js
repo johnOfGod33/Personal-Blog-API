@@ -43,12 +43,13 @@ exports.getPublishedArticles = async (req, res) => {
       { published: true, author: req.authorID },
       { content: 0, Comments: 0 }
     )
+      .populate("author", { username: 1 })
       .skip(page * limit)
       .limit(limit);
 
     await setPublishedArticleCache(articles);
 
-    res.status(200).json(articles);
+    res.status(200).json({ articles });
   } catch (err) {
     console.log("vooici l'erreur :", err);
     res.status(503).json({
@@ -61,12 +62,12 @@ exports.getDraftArticles = (req, res) => {
   const page = req.query.p || 0;
   const limit = req.query.limit || 5;
 
-  Article.find({ published: false })
+  Article.find({ published: false, author: req.ID })
     .populate("author", { username: 1 })
     .skip(page * limit)
     .limit(limit)
     .then((articles) => {
-      res.status(200).json(articles);
+      res.status(200).json({ articles });
     })
     .catch((err) =>
       res.status(503).json({

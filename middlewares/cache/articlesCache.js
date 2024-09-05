@@ -17,7 +17,7 @@ exports.getPublishedArticlesCache = async (req, res, next) => {
 
       res
         .status(200)
-        .json({ message: "get published article by cache", value });
+        .json({ message: "get published article by cache", articles: value });
     } else {
       next();
     }
