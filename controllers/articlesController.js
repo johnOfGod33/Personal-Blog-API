@@ -22,7 +22,7 @@ exports.getPublishedArticles = (req, res) => {
     .skip(page * limit)
     .limit(limit)
     .then((articles) => {
-      res.status(200).json(articles);
+      res.status(200).json({ articles });
     })
     .catch((err) => res.status(500).json(err));
 };
@@ -31,12 +31,12 @@ exports.getDraftArticles = (req, res) => {
   const page = req.query.p || 0;
   const limit = req.query.limit || 100;
 
-  Article.find({ published: false })
+  Article.find({ published: false, author: req.ID })
     .populate("author", { username: 1 })
     .skip(page * limit)
     .limit(limit)
     .then((articles) => {
-      res.status(200).json(articles);
+      res.status(200).json({ articles });
     })
     .catch((err) => res.status(500).json(err));
 };
