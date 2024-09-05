@@ -118,6 +118,7 @@ router.get(
 router.get(
   "/getDraftArticles",
   auth.verifyToken(process.env.SECRET_KEY),
+  articlesCache.getDraftArticlesCache,
   articlesCtrl.getDraftArticles
 );
 
