@@ -13,7 +13,7 @@ exports.createArticle = (req, res) => {
 
 exports.getPublishedArticles = (req, res) => {
   const page = req.query.p || 0;
-  const limit = req.query.limit || 5;
+  const limit = req.query.limit || 100;
 
   Article.find(
     { published: true, author: req.authorID },
@@ -29,7 +29,7 @@ exports.getPublishedArticles = (req, res) => {
 
 exports.getDraftArticles = (req, res) => {
   const page = req.query.p || 0;
-  const limit = req.query.limit || 5;
+  const limit = req.query.limit || 100;
 
   Article.find({ published: false })
     .populate("author", { username: 1 })

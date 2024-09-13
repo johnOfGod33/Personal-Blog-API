@@ -62,7 +62,7 @@ router.post(
  *        required: false
  *        schema:
  *          type: number
- *          default: 5
+ *          default: 100
  *        description: limit the article list returned
  *    responses:
  *      200:
@@ -96,7 +96,7 @@ router.get(
  *        required: false
  *        schema:
  *          type: number
- *          default: 5
+ *          default: 100
  *        description: limit the article list returned
  *    tags:
  *      - articles
