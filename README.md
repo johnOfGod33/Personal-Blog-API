@@ -1,6 +1,6 @@
 # PERSONAL BLOG API
 
-A RESTful API that would power a personal blog
+A RESTful API that would power a personal blog.The client interface can be found [here](https://github.com/johnOfGod33/admin-blog-panel)
 
 # FEATURES
 
