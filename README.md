@@ -2,6 +2,10 @@
 
 A RESTful API that would power a personal blog
 
+## [Live Demo](https://personal-blog-api-7cge.onrender.com/)
+
+![alt text](/assets/Personal%20blog%20api.png)
+
 # FEATURES
 
 - User authentication and authorization (sign up and login)
